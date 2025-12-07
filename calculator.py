@@ -1,4 +1,4 @@
-# Define all your functions first
+
 def addition(x, y):
     return x + y
 
@@ -14,7 +14,7 @@ def divide(x, y):
     else:
         return "Error: Cannot divide by zero"
 
-# Then get user input
+
 x = float(input("Enter first number: "))
 y = float(input("Enter second number: "))
 operation= input("chose wish operator + - * / ")
@@ -28,7 +28,7 @@ match operation:
         result = multiply(x,y)
     case '/' :
         result = divide(x,y)     
-    case _:  # This is the default case (like "default" in other languages)
+    case _:  
         result = "Invalid operation"
 
 
