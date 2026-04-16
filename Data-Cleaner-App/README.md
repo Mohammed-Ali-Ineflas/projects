@@ -19,6 +19,6 @@ This tool is perfect for handling raw data dumps from clients, e-commerce platfo
 
 ## 🚀 How to Run Locally
 
-1. Clone this repository:git clone https://github.com/Mohammed-Ali-Ineflas/Data-Cleaning-Automatique-app.git
-   ```bash
+1. Clone this repository:
+   ```bashgit clone https://github.com/Mohammed-Ali-Ineflas/Data-Cleaning-Automatique-app.git
 
