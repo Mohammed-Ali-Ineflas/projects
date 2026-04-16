@@ -1,67 +1,78 @@
 import streamlit as st
 import pandas as pd
 
-# 1. Configuration dyal l'interface
+# Configure the Streamlit page layout and title
 st.set_page_config(page_title="Data Cleaner Pro", page_icon="🧹", layout="wide")
 
+# App header and description
 st.title("Data Cleaner Express 🧹")
-st.write("Outil rapide bach tn9i les fichiers CSV dyalek en un clic.")
+st.write("A fast and interactive tool to clean your CSV files in one click.")
 
-# 2. Upload dyal l'fichier
-uploaded_file = st.file_uploader("Lo7 l'fichier CSV dyalek hna", type=["csv"])
+# Provide a file uploader widget for CSV files
+uploaded_file = st.file_uploader("Upload your CSV file here", type=["csv"])
 
 if uploaded_file is not None:
     try:
+        # Load the uploaded CSV into a pandas DataFrame
         df = pd.read_csv(uploaded_file)
-        st.success("✅ Fichier tcharja b naja7!")
+        st.success("✅ File uploaded successfully!")
         
-        # Aperçu (Avant)
-        st.subheader("Aperçu dyal les données (Avant)")
-        st.write(f"**Lignes :** {df.shape[0]} | **Colonnes :** {df.shape[1]}")
-        st.dataframe(df.head())
+        # Display original data dimensions and a preview
+        st.subheader("Data Preview (Before)")
+        st.write(f"**Rows:** {df.shape[0]} | **Columns:** {df.shape[1]}")
+        st.dataframe(df.head(20))
         
-        # 3. Les Options dyal Nettoyage
-        st.subheader("⚙️ Options de Nettoyage")
+        # UI settings for data cleaning options
+        st.subheader("⚙️ Cleaning Options")
         
-        # Option 1: Doublons
-        drop_duplicates = st.checkbox("Supprimer les lignes en double (Doublons)")
+        # Toggle option to remove duplicate rows
+        drop_duplicates = st.checkbox("Remove duplicate rows")
         
-        # Option 2: Les valeurs manquantes (Radio button bach khtar 7aja we7da)
+        # Selection menu for missing value handling strategies
         na_action = st.radio(
-            "Kifach bghiti t-gérer les valeurs manquantes (NaN) ?",
-            ["Ne rien faire", 
-             "Supprimer les lignes (Perte de données)", 
-             "Remplacer par la moyenne (Uniquement colonnes numériques)"]
+            "How would you like to handle missing values (NaN)?",
+            ["Do nothing", 
+             "Drop rows with missing values (Data Loss)", 
+             "Fill with column average (Numerical columns only)"]
         )
             
-        # 4. L'Action dyal Nettoyage
-        if st.button("Lancer le nettoyage 🚀"):
+        # Execute cleaning process when the user clicks the button
+        if st.button("Start Cleaning 🚀"):
+            
+            # Create a copy of the dataframe to preserve the original data
             df_clean = df.copy()
             
-            # Traitement dyal Doublons
+            # Handle deduplication
             if drop_duplicates:
                 df_clean = df_clean.drop_duplicates()
                 
-            # Traitement dyal l'khawi (NaN)
-            if na_action == "Supprimer les lignes (Perte de données)":
+            # Handle missing values (NaN) based on user selection
+            if na_action == "Drop rows with missing values (Data Loss)":
+                # Drop any row containing at least one missing value
                 df_clean = df_clean.dropna()
-            elif na_action == "Remplacer par la moyenne (Uniquement colonnes numériques)":
-                # Kanjebdo ghir les colonnes li fihom ar9am
+            elif na_action == "Fill with column average (Numerical columns only)":
+                # Identify numerical columns to avoid calculating the mean on text/categorical data
                 numeric_cols = df_clean.select_dtypes(include=['number']).columns
-                # Kan3emro lkhawi fihom b la moyenne dyal kola colonne
+                
+                # Impute missing values in numerical columns using the respective column's mean
                 df_clean[numeric_cols] = df_clean[numeric_cols].fillna(df_clean[numeric_cols].mean())
                 
-            st.subheader("✨ Aperçu dyal les données (Après)")
-            st.write(f"**Lignes restantes :** {df_clean.shape[0]}")
+            # Display the cleaned data preview and new dimensions
+            st.subheader("✨ Data Preview (After)")
+            st.write(f"**Remaining Rows:** {df_clean.shape[0]}")
             st.dataframe(df_clean.head())
             
-            # 5. Export dyal l'fichier n9i
+            # Convert the cleaned dataframe back to CSV format for download
             csv = df_clean.to_csv(index=False).encode('utf-8')
+            
+            # Provide a download button for the processed file
             st.download_button(
-                label="⬇️ Télécharger le fichier nettoyé",
+                label="⬇️ Download Cleaned File",
                 data=csv,
-                file_name="data_nettoyee.csv",
+                file_name="cleaned_data.csv",
                 mime="text/csv",
             )
+            
     except Exception as e:
-        st.error(f"W9e3 mochkil f l9raya dyal l'fichier. L'erreur: {e}")
+        # Handle potential file reading or processing errors gracefully
+        st.error(f"An error occurred while reading the file. Error: {e}")
