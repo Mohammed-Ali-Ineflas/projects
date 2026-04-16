@@ -19,5 +19,5 @@ This tool is perfect for handling raw data dumps from clients, e-commerce platfo
 
 ## 🚀 How to Run Locally
 
-1. Clone this repository: git clone https://github.com/Mohammed-Ali-Ineflas/Data-Cleaner-App.git
+1. Clone this repository: [git clone https://github.com/Mohammed-Ali-Ineflas/Data-Cleaner-App.git](https://github.com/Mohammed-Ali-Ineflas/projects/tree/master/Data-Cleaner-App)
 
